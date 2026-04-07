@@ -87,7 +87,7 @@ npm run dev
 
 App URL:
 
-- `http://localhost:3000`
+- `http://localhost:5000`
 
 ## API Usage
 

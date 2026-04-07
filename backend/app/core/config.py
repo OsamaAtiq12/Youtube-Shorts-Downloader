@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     app_env: str = "development"
     app_host: str = "0.0.0.0"
     app_port: int = 8000
-    frontend_origin: str = "http://localhost:3000"
+    frontend_origin: str = "http://localhost:5000"
     temp_dir: Path = Path("./tmp")
     max_file_age_minutes: int = 30
     #: Re-encode to H.264/AAC for Windows Media Player / Edge (slower). Env: TRANSCODE_COMPAT_MP4

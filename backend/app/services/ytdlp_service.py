@@ -2,6 +2,7 @@ import logging
 import os
 import re
 import time
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -84,7 +85,12 @@ class YtDlpService:
             formats=formats,
         )
 
-    def download(self, payload: DownloadRequest) -> tuple[Path, str]:
+    def download(
+        self,
+        payload: DownloadRequest,
+        *,
+        on_hook: Callable[[dict[str, Any]], None] | None = None,
+    ) -> tuple[Path, str]:
         info = self.extract_info(payload.url)
         safe_title = self._sanitize_filename(info.title)
         output_template = str(self.temp_dir / f"{safe_title}-%(id)s.%(ext)s")
@@ -119,6 +125,8 @@ class YtDlpService:
         def _on_progress(progress: dict[str, Any]) -> None:
             if progress.get("status") == "finished" and progress.get("filename"):
                 finished_filepaths.append(Path(str(progress["filename"])))
+            if on_hook:
+                on_hook(progress)
 
         options["progress_hooks"] = [_on_progress]
         download_started_at = time.time()
@@ -164,11 +172,15 @@ class YtDlpService:
 
         settings = get_settings()
         if settings.transcode_compat_mp4:
+            if on_hook:
+                on_hook({"_app_phase": "transcoding", "_app_percent": 88.0})
             ok = transcode_mp4_h264_aac(file_path, ffmpeg_exe)
             if not ok:
                 logger.info(
                     "Delivering muxed file without transcode. For picky players use VLC, or fix FFmpeg and retry. "
                     "Set TRANSCODE_COMPAT_MP4=0 to skip re-encode attempts."
                 )
+            elif on_hook:
+                on_hook({"_app_phase": "finalizing", "_app_percent": 97.0})
 
         return file_path, file_path.name
