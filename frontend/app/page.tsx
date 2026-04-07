@@ -83,7 +83,7 @@ export default function HomePage() {
             YouTube Shorts Downloader
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-            Fetch a Short, choose 1080p or best quality, and get one MP4 with video and audio.
+            Paste a link, pick a quality, and download a single file with picture and sound—ready to watch or share.
           </p>
         </section>
 
@@ -100,7 +100,7 @@ export default function HomePage() {
               <SectionHeader title="2. Preview" className="mb-0" />
               <SectionHeader
                 title="3. Quality & download"
-                subtitle="Video + audio in one MP4 (FFmpeg via backend dependency or PATH)."
+                subtitle="Choose how sharp you want the video, then save it to your device."
                 className="mb-0"
               />
             </div>
@@ -124,6 +124,7 @@ export default function HomePage() {
                         disabled={!canDownload}
                         isLoading={downloadMutation.isPending}
                         downloadProgress={downloadMutation.downloadProgress}
+                        downloadPhase={downloadMutation.downloadPhase}
                       />
                     </>
                   ) : (

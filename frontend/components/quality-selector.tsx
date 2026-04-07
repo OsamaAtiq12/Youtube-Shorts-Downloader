@@ -15,12 +15,12 @@ const OPTIONS: { id: VideoQuality; title: string; desc: string }[] = [
   {
     id: "1080p",
     title: "1080p",
-    desc: "Up to Full HD — best match for vertical Shorts (1080×1920) and normal 1080p. Video + audio muxed.",
+    desc: "Up to Full HD—great for vertical Shorts and everyday viewing on phone or TV.",
   },
   {
     id: "best",
     title: "Best quality",
-    desc: "Highest video + best audio YouTube offers for this clip, combined into one MP4.",
+    desc: "The highest quality YouTube offers for this clip, with picture and sound together.",
   },
 ];
 
@@ -31,9 +31,7 @@ export function QualitySelector({ value, onChange, disabled }: QualitySelectorPr
         <label className="text-sm font-semibold text-slate-800">Video quality</label>
       </div>
       <p className="text-xs leading-relaxed text-slate-500">
-        Downloads are always <strong className="text-slate-700">video with audio</strong> in one file. The API merges streams with{" "}
-        <strong className="text-slate-700">FFmpeg</strong> (bundled via <code className="rounded bg-slate-100 px-1">imageio-ffmpeg</code> or your system{" "}
-        <code className="rounded bg-slate-100 px-1">PATH</code>).
+        Every download is a <strong className="text-slate-700">single file</strong> with both picture and sound—nothing extra to combine.
       </p>
       <ul className="space-y-2">
         {OPTIONS.map((opt) => {

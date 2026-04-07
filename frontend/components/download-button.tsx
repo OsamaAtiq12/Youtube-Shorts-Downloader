@@ -5,18 +5,41 @@ import { Download, Loader2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 
+const PHASE_LABEL: Record<string, string> = {
+  starting: "Starting…",
+  downloading: "Downloading from YouTube…",
+  merging: "Combining video and audio…",
+  transcoding: "Making sure it plays smoothly…",
+  finalizing: "Almost done…",
+  ready: "Preparing file…",
+  transfer: "Sending to your browser…",
+  complete: "Done",
+  working: "Working…",
+};
+
 interface DownloadButtonProps {
   onDownload: () => void;
   isLoading: boolean;
   disabled: boolean;
-  /** 0–100, -1 = indeterminate, null = idle */
+  /** 0–100 */
   downloadProgress: number | null;
+  /** Server-reported phase key */
+  downloadPhase?: string;
 }
 
-export function DownloadButton({ onDownload, isLoading, disabled, downloadProgress }: DownloadButtonProps) {
+export function DownloadButton({
+  onDownload,
+  isLoading,
+  disabled,
+  downloadProgress,
+  downloadPhase = "",
+}: DownloadButtonProps) {
   const showBar = isLoading;
-  const indeterminate = downloadProgress === -1 || downloadProgress === null;
-  const pct = downloadProgress === null || downloadProgress === -1 ? null : downloadProgress;
+  const pct =
+    downloadProgress === null || downloadProgress === -1 ? null : downloadProgress;
+  const indeterminate = pct === null && isLoading;
+  const phaseLabel = PHASE_LABEL[downloadPhase] ?? (downloadPhase ? downloadPhase : "");
+
   const label =
     isLoading && pct !== null && pct >= 0 && pct < 100
       ? `Downloading… ${pct}%`
@@ -39,7 +62,11 @@ export function DownloadButton({ onDownload, isLoading, disabled, downloadProgre
         <div className="space-y-2">
           <Progress value={pct} indeterminate={indeterminate} />
           <p className="text-center text-xs text-slate-500">
-            {indeterminate ? "Receiving file…" : `Transfer ${pct ?? 0}%`}
+            {indeterminate
+              ? "Starting…"
+              : phaseLabel
+                ? `${phaseLabel} · ${pct ?? 0}%`
+                : `Progress ${pct ?? 0}%`}
           </p>
         </div>
       ) : null}

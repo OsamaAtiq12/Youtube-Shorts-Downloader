@@ -39,6 +39,18 @@ class DownloadRequest(BaseModel):
     video_quality: VideoQuality = "best"
 
 
+class DownloadJobStartResponse(BaseModel):
+    job_id: str
+
+
+class DownloadJobStatusResponse(BaseModel):
+    percent: float
+    phase: str
+    done: bool
+    ready: bool
+    error: str | None = None
+
+
 class DownloadHistoryItem(BaseModel):
     title: str
     url: str

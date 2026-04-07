@@ -27,5 +27,6 @@ Thumbs.db
 
 # IDE
 .idea/
-.vscode/
 *.swp
+config.bat
+node_modules
